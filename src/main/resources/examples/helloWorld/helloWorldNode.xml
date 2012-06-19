@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<smas>
+    <version>0.1</version>
+    <holons>
+        <holon>
+            <host>localhost</host>
+            <port>2553</port>
+
+            <nodes>
+                <node>
+                    <class>de.hsaugsburg.smas.node.BlankSmasNode</class>
+                    <plugins>
+                        <plugin>
+                            <name>HWPlugin</name>
+                            <class>de.hsaugsburg.smas.playground.HelloWorldPlugin</class>
+                        </plugin>
+                    </plugins>
+                </node>
+            </nodes>
+        </holon>
+    </holons>
+</smas>
