@@ -7,10 +7,8 @@ smas-core - Scala Multi Agent System
 
 SMAS is a Multi Agent System like JADE or Cougar based on Scala
 
-## INSTALLATION
+## TUTORIAL
 
-
-
-## RUNNING
+[SMAS-Tutorial.pdf](http://www.hs-augsburg.de/~c-ego/public/SMAS-Tutorial.pdf) German
 
 
