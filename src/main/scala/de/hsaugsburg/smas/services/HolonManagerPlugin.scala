@@ -111,7 +111,7 @@ class HolonManagerPlugin extends SmasPlugin
   private def takeCareOfServiceRequestWhichCanNotBeAnsweredFromCache(msg: ServiceRequest)
   {
     if (!holonTable.contains(msg.sender.getId)) {
-      log.info("Request can NOT be answered from cache: '%s'. Start relaying...".format(msg.service))
+      log.info("Request can NOT be answered from cache: '{}'. Start relaying...", msg.service)
 
       updateCache(msg.service, msg.sender, serviceRequestCache)
       relayServiceRequestToAllKnownHolons(msg)
@@ -124,7 +124,7 @@ class HolonManagerPlugin extends SmasPlugin
 
   private def takeCareOfServiceRequestWhichCanBeAnsweredFromCache(msg: ServiceRequest)
   {
-    log.info("Request can be answered from cache: '%s'".format(msg.service))
+    log.info("Request can be answered from cache: '{}'", msg.service)
     val serviceLocations: List[AddressBookEntry] = serviceTable.get(msg.service) match
     {
       case Some(item) => item.toList
@@ -132,7 +132,7 @@ class HolonManagerPlugin extends SmasPlugin
     }
 
     msg.sender ! ServiceResponse(msg.service, serviceLocations)
-    log.debug("Sended answer to %s".format(msg.sender))
+    log.debug("Sended answer to {}", msg.sender)
   }
 
   def handleMemberRequest(msg: MemberRequest)
@@ -149,7 +149,7 @@ class HolonManagerPlugin extends SmasPlugin
 
   private def takeCareOfMemberRequestWhichCanBeHandledFromCache(msg: MemberRequest)
   {
-    log.info("Member Request can be answered from cache: '%s'".format(msg.memberName))
+    log.info("Member Request can be answered from cache: '{}'", msg.memberName)
     val memberLocation = memberTable.get(msg.memberName) match
     {
       case Some(item) => item.addressBookEntry
@@ -159,7 +159,7 @@ class HolonManagerPlugin extends SmasPlugin
     if(memberLocation != null)
     {
       msg.sender ! MemberResponse(msg.memberName, memberLocation)
-      log.debug("Request answerd: %s".format(memberLocation))
+      log.debug("Request answerd: {}", memberLocation)
     }
 
   }
@@ -168,7 +168,7 @@ class HolonManagerPlugin extends SmasPlugin
   {
     if(!holonTable.contains(msg.sender.getId))
     {
-      log.info("Member request can NOT be answered from cache: '%s'. Start relaying...".format(msg.memberName))
+      log.info("Member request can NOT be answered from cache: '{}'. Start relaying...", msg.memberName)
       updateCache(msg.memberName, msg.sender, memberRequestCache)
       relayMemberRequestToAllKnownHolons(msg)
     }
@@ -184,7 +184,7 @@ class HolonManagerPlugin extends SmasPlugin
     {
       if (holon != msg.sender)
       {
-        log.debug("Relaying member request to other holon: %s".format(holon))
+        log.debug("Relaying member request to other holon: {}", holon)
         holon ! MemberRequest(msg.memberName)
       }
     }
@@ -196,7 +196,7 @@ class HolonManagerPlugin extends SmasPlugin
     {
       if(holon != msg.sender)
       {
-        log.debug("Relaying responseName request to holon %s".format(holon))
+        log.debug("Relaying responseName request to holon {}", holon)
         holon ! ServiceRequest(msg.service)
       }
     }
@@ -233,11 +233,11 @@ class HolonManagerPlugin extends SmasPlugin
       }
 
       satisfyAllServiceRequestsAndUpdateServiceRequestCache(msg.service, msg.serviceLocations)
-      log.debug("Demanded ServiceRequest answered for responseName: %s".format(msg.service))
+      log.debug("Demanded ServiceRequest answered for responseName: {}", msg.service)
     }
     else
     {
-      log.warn("Not demanded ServiceResponse ignored: %s".format(msg))
+      log.warn("Not demanded ServiceResponse ignored: {}", msg)
     }
 
   }
@@ -248,11 +248,11 @@ class HolonManagerPlugin extends SmasPlugin
     {
       updateMemberTable(msg.memberName, msg.memberLocation)
       satisfyAllMemberRequestsAndUpdateMemberRequestCache(msg.memberName, msg.memberLocation)
-      log.debug("Demanded MemberRequest answered for member: %s".format(msg.memberName))
+      log.debug("Demanded MemberRequest answered for member: {}", msg.memberName)
     }
     else
     {
-      log.warn("Not demanded MemberResponse ignored: %s".format(msg))
+      log.warn("Not demanded MemberResponse ignored: {}", msg)
     }
   }
 
@@ -260,12 +260,12 @@ class HolonManagerPlugin extends SmasPlugin
   {
     if (memberTable.putIfAbsent(memberName, AddressBookEntryAliveWrapper(location)) == None && memberTable.contains(memberName))
     {
-      log.debug("New member stored in cache: %s".format(location))
+      log.debug("New member stored in cache: {}", location)
       true
     }
     else
     {
-      log.warn("Member with this name already exists: %s".format(memberName))
+      log.warn("Member with this name already exists: {}", memberName)
       false
     }
   }
@@ -308,11 +308,11 @@ class HolonManagerPlugin extends SmasPlugin
     log.debug("Try to register a new holon member!")
     if(msg.newMember != null && msg.newMember.isComplete && updateMemberTable(msg.newMember.getId, msg.newMember))
     {
-      log.info("A new holon member was registered: %s".format(msg.newMember))
+      log.info("A new holon member was registered: {}", msg.newMember)
     }
     else
     {
-      log.warn("This holon member was not registered: %s".format(msg.newMember))
+      log.warn("This holon member was not registered: {}", msg.newMember)
     }
   }
 
@@ -322,11 +322,11 @@ class HolonManagerPlugin extends SmasPlugin
     {
       if (memberTable.remove(msg.member.getId, AddressBookEntryAliveWrapper(msg.member)))
       {
-        log.info("A holon member was unregistered: %s".format(msg.member))
+        log.info("A holon member was unregistered: {}", msg.member)
       }
       else
       {
-        log.warn("This holon member id was not present: %s".format(msg.member))
+        log.warn("This holon member id was not present: {}", msg.member)
       }
     }
 
@@ -337,11 +337,11 @@ class HolonManagerPlugin extends SmasPlugin
     val holon = msg.holon
     if(holon != null && msg.holon.isComplete && holonTable.putIfAbsent(msg.holon.getId, holon) == None && holonTable.contains(msg.holon.getId))
     {
-      log.debug("New holon registered: %s".format(holon))
+      log.debug("New holon registered: {}", holon)
     }
     else
     {
-      log.warn("Holon was not registered: %s".format(holon))
+      log.warn("Holon was not registered: {}", holon)
     }
   }
 
@@ -349,11 +349,11 @@ class HolonManagerPlugin extends SmasPlugin
   {
     if(holonTable.remove(msg.holon.getId, msg.holon))
     {
-      log.debug("Holon was unregistered: %s".format(msg.holon))
+      log.debug("Holon was unregistered: {}", msg.holon)
     }
     else
     {
-      log.warn("Holon was not unregistered: %s".format(msg.holon))
+      log.warn("Holon was not unregistered: {}", msg.holon)
     }
   }
 
@@ -378,7 +378,7 @@ class HolonManagerPlugin extends SmasPlugin
           val newServiceLocations = serviceLocations.filter(_ != msg.location)
           serviceTable.put(msg.service, newServiceLocations.toList)
         }
-        log.debug("ServiceLocation %s was unregistered".format(msg.service))
+        log.debug("ServiceLocation '{}' was unregistered", msg.service)
       }
     }
   }
@@ -388,7 +388,7 @@ class HolonManagerPlugin extends SmasPlugin
     memberTable.get(msg.name) match
     {
       case Some(wrapper) => wrapper.receivedIsAliveResponse()
-      case None => log.debug("cannot handle isAlive response from member %s, as it is not in the member map".format(msg.name))
+      case None => log.debug("cannot handle isAlive response from member '{}', as it is not in the member map", msg.name)
     }
   }
 

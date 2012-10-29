@@ -21,7 +21,7 @@ class SmasPluginManager extends PluginManager
 {
   def findMethodsForMessage(msg: BaseMessage, pluginName: String = null): List[MethodWrapper] =
   {
-    log.debug("Searching methods for %s".format(msg))
+    log.debug("Searching methods for {}", msg)
     val result = new ListBuffer[MethodWrapper]()
     val msgName = getClassNameWithOutPackage(msg.getClass.getName)
 
@@ -57,10 +57,10 @@ class SmasPluginManager extends PluginManager
   {
     var result = new ListBuffer[MethodWrapper]()
 
-    log.debug("Possible plugin: %s for msg %s".format(plugin, msgName))
+    log.debug("Possible plugin: {} for msg {}", plugin, msgName)
     for(pluginMethod <- checkPluginForHandleMethod(msgName, plugin))
     {
-      log.debug("Method found: %s".format(pluginMethod))
+      log.debug("Method found: {}", pluginMethod)
       result += MethodWrapper(plugin, pluginMethod, msg)
     }
 
@@ -133,15 +133,15 @@ class SmasPluginManager extends PluginManager
 
   def registerPlugin(plugin: SmasPlugin, pluginName: String): Boolean =
   {
-    log.debug("Try to register Plugin: " + pluginName + ", " + plugin)
+    log.debug("Try to register Plugin: {}, {}", pluginName, plugin)
 
     if(pluginList.putIfAbsent(pluginName, plugin) == None)
     {
-      log.info("Plugin was registered: " + pluginName + ", " + plugin)
+      log.info("Plugin was registered: {}, {}", pluginName, plugin)
       return true
     }
 
-    log.warn("Plugin was not registered: " + pluginName + ", " + plugin)
+    log.warn("Plugin was not registered: {}, {}", pluginName, plugin)
     false
   }
 
@@ -155,7 +155,7 @@ class SmasPluginManager extends PluginManager
     {
       if(!plugin.start)
       {
-        log.warn("Plugin was not started: %s".format(plugin))
+        log.warn("Plugin was not started: {}", plugin)
         result = false
       }
     }
@@ -173,7 +173,7 @@ class SmasPluginManager extends PluginManager
     {
       if(!plugin.stop)
       {
-        log.warn("Plugin was not stopped: %s".format(plugin))
+        log.warn("Plugin was not stopped: {}", plugin)
         result = false
       }
     }
@@ -183,7 +183,7 @@ class SmasPluginManager extends PluginManager
 
   def unRegisterPlugin(pluginName: String): Boolean =
   {
-    log.debug("Try to unregister Plugin: " + pluginName)
+    log.debug("Try to unregister Plugin: {}", pluginName)
     var result = false
 
     val plugin = pluginList.remove(pluginName) match
@@ -194,12 +194,12 @@ class SmasPluginManager extends PluginManager
 
     if(plugin != null && plugin.stop && plugin.getPluginState == PluginState.Stopped)
     {
-      log.info("Plugin was unregistered: " + pluginName)
+      log.info("Plugin was unregistered: {}", pluginName)
       result = true
     }
     else
     {
-      log.warn("Plugin was not unregistered: " + pluginName)
+      log.warn("Plugin was not unregistered: {}", pluginName)
     }
 
     result

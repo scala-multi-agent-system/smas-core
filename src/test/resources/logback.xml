@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" debug="false">
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%4p] [%d{ISO8601}] [%t] %c{1}: %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>./logs/akka.log</File>
+        <encoder>
+            <pattern>[%4p] [%d{ISO8601}] [%t] %c{1}: %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./logs/akka.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="se.scalablesolutions" level="info"/>
+    <logger name="de.hsaugsburg.smas.plugin.SmasPluginManager" level="warn"/>
+    <logger name="de.hsaugsburg.smas.services.HolonManagerPlugin" level="warn"/>
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="R"/>
+    </root>
+</configuration>
