@@ -181,13 +181,13 @@
         <repository>
             <id>nexus</id>
             <name>Nexus Release Repository</name>
-            <url>http://cpsindustry.informatik.hs-augsburg.de:8082/nexus/content/repositories/releases/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
             <name>Nexus Snapshot Repository</name>
-            <url>http://cpsindustry.informatik.hs-augsburg.de:8082/nexus/content/repositories/snapshots/</url>
-			<uniqueVersion>false</uniqueVersion>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
     </distributionManagement>
 </project>
